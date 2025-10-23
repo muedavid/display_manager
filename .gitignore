@@ -1,0 +1,25 @@
+# Python virtual environments
+venv/
+.env/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+
+# Jupyter and logs
+.ipynb_checkpoints/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
