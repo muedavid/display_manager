@@ -26,19 +26,19 @@ pip install pillow gpiod
 
 To allow non-root users to access GPIO pins:
 
-*1. Create a udev rules file:*
+**1. Create a udev rules file:**
 ```bash
 sudo nano /etc/udev/rules.d/99-gpio.rules
 
 ```
 
-*2. Add the following line:*
+**2. Add the following line:**
 ```bash
 SUBSYSTEM=="gpio*", PROGRAM="/bin/sh -c 'chown -R root:gpio /sys/class/gpio && chmod -R 770 /sys/class/gpio'"
 
 ```
 
-*3. Save the file and reload udev rules:*
+**3. Save the file and reload udev rules:**
 ```bash
 sudo udevadm control --reload-rules
 sudo udevadm trigger
@@ -46,12 +46,12 @@ sudo udevadm trigger
 
 ## 4. Setup Start at BOOT using a Systemd Service
 
-*1. Open a new service file:*
+**1. Open a new service file:**
 ```bash
 sudo nano /etc/systemd/system/button_display.service
 ```
 
-* 2. Create Basch Script for Launching the Application:*
+**2. Create Basch Script for Launching the Application:**
 Create a script `/home/pi/code/start_display.sh`:
 ```bash
 #!/bin/bash
@@ -65,7 +65,7 @@ Make it executable:
 sudo chmod +x /home/pi/code/start_display.sh
 ```
 
-*3. Paste the following:*
+**3. Paste the following:**
 ```bash
 [Unit]
 Description=Button Image Display
@@ -83,7 +83,7 @@ Restart=on-failure
 WantedBy=graphical.target
 ```
 
-*4. Enable the service:*
+**4. Enable the service:**
 Paste the following:
 ```bash
 sudo systemctl daemon-reload
@@ -91,8 +91,5 @@ sudo systemctl enable button_display.service
 sudo systemctl start button_display.service
 ```
 
-## Disable Cursor:
-
-sudo nano /etc/lightdm/lightdm.conf
-Add under [Seat:*]:
-xserver-command=X -nocursor
+## 5. Disable Cursor:
+In `/etc/lightdm/lightdm.conf` Add under `[Seat:*]` the following line: `xserver-command=X -nocursor`
