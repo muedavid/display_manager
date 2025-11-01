@@ -2,8 +2,6 @@
 
 Follow these steps to set up your Raspberry Pi for running the button image display application.
 
----
-
 ## 1. Update System Packages
 Make sure your system is up to date:
 
@@ -13,7 +11,7 @@ sudo apt upgrade -y
 sudo apt install -y python3-pil python3-tk
 ```
 
-## 3. Setup Virutal Env
+## 2. Setup Virutal Env
 Setup venv
 
 ```bash
@@ -24,7 +22,7 @@ source .venv/bin/activate
 pip install pillow gpiod
 ```
 
-## 4. Configure GPIO Permissions
+## 3. Configure GPIO Permissions
 
 To allow non-root users to access GPIO pins:
 
@@ -45,3 +43,56 @@ SUBSYSTEM=="gpio*", PROGRAM="/bin/sh -c 'chown -R root:gpio /sys/class/gpio && c
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
+
+## 4. Setup Start at BOOT using a Systemd Service
+
+*1. Open a new service file:*
+```bash
+sudo nano /etc/systemd/system/button_display.service
+```
+
+* 2. Create Basch Script for Launching the Application:*
+Create a script `/home/pi/code/start_display.sh`:
+```bash
+#!/bin/bash
+# Wait 2 seconds for X server to be ready
+sleep 2
+/home/pi/code/.venv/bin/python /home/pi/code/display_application/display.py
+```
+
+Make it executable:
+```bash
+sudo chmod +x /home/pi/code/start_display.sh
+```
+
+*3. Paste the following:*
+```bash
+[Unit]
+Description=Button Image Display
+After=graphical.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/code
+Environment=DISPLAY=:0
+ExecStart=/home/pi/code/start_display.sh
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+```
+
+*4. Enable the service:*
+Paste the following:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable button_display.service
+sudo systemctl start button_display.service
+```
+
+## Disable Cursor:
+
+sudo nano /etc/lightdm/lightdm.conf
+Add under [Seat:*]:
+xserver-command=X -nocursor
