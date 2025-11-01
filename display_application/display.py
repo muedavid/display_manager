@@ -87,16 +87,20 @@ class ButtonImageDisplay:
         self.root.geometry(f"{w}x{h}+{x}+{y}")
         self.root.configure(background="black")
 
+        # Hide mouse cursor
+        self.root.config(cursor="none")
+
         # Canvas to display images
         self.canvas = tk.Canvas(self.root, width=w, height=h, highlightthickness=0, bg="black")
         self.canvas.pack(fill="both", expand=True)
+        self.canvas.config(cursor="none")
         self.canvas_image = self.canvas.create_image(0, 0, anchor="nw", image=None)
 
         # Keep focus
         def ensure_focus(event=None):
             self.root.focus_force()
             self.root.focus_set()
-            self.root.grab_set_global()
+            # self.root.grab_set_global()
         self.root.after(100, ensure_focus)
         self.root.bind("<FocusOut>", ensure_focus)
 
