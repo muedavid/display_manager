@@ -93,3 +93,28 @@ sudo systemctl start button_display.service
 
 ## 5. Disable Cursor:
 In `/etc/lightdm/lightdm.conf` Add under `[Seat:*]` the following line: `xserver-command=X -nocursor`
+
+## 6. Connect to the Pi
+
+Configure a **static IP** on your development laptop for the Ethernet connection:
+
+- **IP:** `192.168.0.5`  
+- **Netmask:** `/24` (equivalent to `255.255.255.0`)
+
+Then connect to the Pi via SSH (default password: `feg`):
+
+```bash
+ssh pi@192.168.0.1
+```
+
+## 7. Change Wifi Config
+
+Edit the Wi-Fi netplan file on the Pi:
+```bash
+/etc/netplan/00-wifi.yaml
+```
+After making changes, apply the new configuration:
+```bash
+sudo netplan generate
+sudo netplan apply
+```
