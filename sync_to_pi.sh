@@ -31,7 +31,7 @@ echo "Syncing project to Raspberry Pi ($REMOTE_DIR)..."
 rsync -avz \
     "${EXCLUDE_ARGS[@]}" \
     ./ \
-    feg:"$REMOTE_DIR"
+    feg-eth:"$REMOTE_DIR"
 
 echo "✅ Sync complete!"
 

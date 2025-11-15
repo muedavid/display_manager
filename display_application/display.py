@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 import tkinter as tk
 import gpiod
 import time
-
+import subprocess
 
 class ButtonImageDisplay:
     XRANDR_REGEX = re.compile(
@@ -86,6 +86,14 @@ class ButtonImageDisplay:
         self.root.overrideredirect(True)
         self.root.geometry(f"{w}x{h}+{x}+{y}")
         self.root.configure(background="black")
+
+
+        # --- Start unclutter AFTER Tk root exists ---
+        subprocess.Popen(
+            ["unclutter", "-idle", "0", "-root"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
 
         # Hide mouse cursor
         self.root.config(cursor="none")
@@ -190,6 +198,10 @@ class ButtonImageDisplay:
 
 
 if __name__ == "__main__":
+
+    # Start unclutter to hide cursor immediately (-idle 0)
+    # subprocess.run(["unclutter", "-idle", "0", "-root"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
     app = ButtonImageDisplay(
         button_pin=17,
         chip="/dev/gpiochip0",
