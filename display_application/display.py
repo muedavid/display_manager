@@ -199,14 +199,22 @@ class ButtonImageDisplay:
 
 if __name__ == "__main__":
 
-    # Start unclutter to hide cursor immediately (-idle 0)
-    # subprocess.run(["unclutter", "-idle", "0", "-root"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    id_file = os.path.expanduser("~/id")
+    try:
+        with open(id_file, "r") as f:
+            content = f.read().strip()  # Remove any leading/trailing whitespace
+        id = int(content)  # Convert the content to an integer
+        print(f"id: {id}")
+    except FileNotFoundError:
+        print(f"The file {id_file} does not exist.")
+    except ValueError:
+        print(f"The file {id_file} does not contain a valid id.")
 
     app = ButtonImageDisplay(
         button_pin=17,
         chip="/dev/gpiochip0",
         display="HDMI-A-2",
-        image1="feg.png",
-        image2="test.png",
+        image1=f"{2 * id + 1}.png",
+        image2=f"{2 * id + 2}.png",
     )
     app.run()
